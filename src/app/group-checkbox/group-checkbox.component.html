@@ -1,0 +1,9 @@
+<div style="display: grid">
+  <input type="text" *ngIf="searchable" matInput [(ngModel)]="searchValue" />
+
+  <app-checkbox
+    *ngFor="let topping of options | filter : { value: searchValue }"
+    [value]="topping"
+    [label]="topping"
+  ></app-checkbox>
+</div>
