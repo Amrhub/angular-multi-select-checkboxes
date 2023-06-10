@@ -1,9 +1,57 @@
-<div style="display: grid">
-  <input type="text" *ngIf="searchable" matInput [(ngModel)]="searchValue" />
+<div class="container">
+  <ng-container *ngIf="hasSelectAll">
+    <mat-checkbox
+      (click)="selectAll()"
+      [checked]="isAllChecked()"
+      [indeterminate]="isIndeterminate()"
+      [disabled]="searchValue !== ''"
+      >Select All</mat-checkbox
+    >
+    <mat-divider></mat-divider>
+  </ng-container>
 
-  <app-checkbox
-    *ngFor="let topping of options | filter : { value: searchValue }"
-    [value]="topping"
-    [label]="topping"
-  ></app-checkbox>
+  <mat-form-field *ngIf="searchable" appearance="outline" style="max-width: 248px">
+    <mat-label>Search</mat-label>
+    <input type="text" matInput [(ngModel)]="searchValue" placeholder="Extra cheese" />
+    <button
+      *ngIf="searchValue"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="searchValue = ''"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-icon matPrefix fontIcon="search"></mat-icon>
+  </mat-form-field>
+
+  <p *ngIf="shouldGroupSelected && isIndeterminate()" style="margin-block: 0.5rem">Selected</p>
+  <ng-container
+    *ngFor="let topping of options | filter : { value: searchValue, filterProperty: 'label' }"
+  >
+    <mat-checkbox
+      *ngIf="shouldGroupSelected && isChecked(topping.id)"
+      [checked]="isChecked(topping.id)"
+      (click)="toggleValue(topping.id)"
+      [value]="topping.id.toString()"
+    >
+      {{ topping.label }}
+    </mat-checkbox>
+  </ng-container>
+  <ng-container *ngIf="shouldGroupSelected && isIndeterminate()">
+    <mat-divider></mat-divider>
+  </ng-container>
+
+  <ng-container
+    *ngFor="let topping of options | filter : { value: searchValue, filterProperty: 'label' }"
+  >
+    <mat-checkbox
+      *ngIf="!shouldGroupSelected || !isChecked(topping.id)"
+      [checked]="isChecked(topping.id)"
+      (click)="toggleValue(topping.id)"
+      [value]="topping.id.toString()"
+    >
+      {{ topping.label }}
+    </mat-checkbox>
+  </ng-container>
 </div>

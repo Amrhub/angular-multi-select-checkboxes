@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, UntypedFormBuilder } from '@angular/forms';
+import { BehaviorSubject, Observable, Subject, Subscription, map, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,14 +8,16 @@ import { FormBuilder, UntypedFormBuilder } from '@angular/forms';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  sub = new BehaviorSubject(undefined);
   form = this.fb.group({
-    toppings: [[]],
+    toppings: [[3]],
   });
-  toppingOptions = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  toppingOptions = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'].map(
+    (label, index) => ({
+      id: index + 1,
+      label,
+    })
+  );
 
-  constructor(private fb: UntypedFormBuilder) {
-    setTimeout(() => {
-      this.form.controls['toppings'].setValue(['Mushroom', 'Onion', 'Pepperoni']);
-    }, 3000);
-  }
+  constructor(private fb: UntypedFormBuilder) {}
 }
