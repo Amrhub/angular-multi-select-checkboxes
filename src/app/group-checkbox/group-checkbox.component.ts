@@ -107,21 +107,4 @@ export class GroupCheckboxComponent implements ControlValueAccessor {
   isIndeterminate(): boolean {
     return this.value.length > 0 && !this.isAllChecked();
   }
-
-  filterChecked(option: { id: number; label: string }): boolean {
-    if (!this.searchValue) return this.isChecked(option.id);
-    return (
-      option.label.toLowerCase().includes(this.searchValue.toLowerCase()) &&
-      this.isChecked(option.id)
-    );
-  }
-
-  filterUnchecked(option: { id: number; label: string }): boolean {
-    if (!this.searchValue) return !this.isChecked(option.id);
-
-    return (
-      option.label.toLowerCase().includes(this.searchValue.toLowerCase()) &&
-      !this.isChecked(option.id)
-    );
-  }
 }
